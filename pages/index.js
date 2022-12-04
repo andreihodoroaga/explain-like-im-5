@@ -80,8 +80,8 @@ const Home = () => {
             <Button
               isGenerating={isBaseGenerating}
               generateExplanation={callGenerateEndpoint}
-							type="base"
-							content="Explain"
+              type="base"
+              content="Explain"
             />
           </div>
           {apiOutput && (
@@ -93,25 +93,33 @@ const Home = () => {
               </div>
               <div className="output-content">
                 <p>{apiOutput}</p>
-								{advancedApiOutput && ( <p className="advanced">{advancedApiOutput}</p> )}
+                {advancedApiOutput && (
+                  <p className="advanced">{advancedApiOutput}</p>
+                )}
               </div>
               <div className="output-buttons">
-								{!advancedApiOutput &&
-									(<Button
-										isGenerating={isAdvancedGenerating}
-										generateExplanation={callMoreDetailsEndpoint}
-										type="advanced"
-										content="More details"
-									/>
-								)}
-							</div>
+                {!advancedApiOutput && (
+                  <Button
+                    isGenerating={isAdvancedGenerating}
+                    generateExplanation={callMoreDetailsEndpoint}
+                    type="advanced"
+                    content="More details"
+                  />
+                )}
+              </div>
             </div>
           )}
         </div>
       </div>
-			<div className='footer'>
-				<p className={`${isBaseGenerating || isAdvancedGenerating ? 'active' : ''} footer-text`}>Using OpenAI's GPT-3</p>
-			</div>
+      <div className="footer">
+        <a
+          href="https://openai.com/api"
+          target="_blank"
+          className={`${isBaseGenerating || isAdvancedGenerating ? "active" : ""} footer-text`}
+        >
+          Using OpenAI's GPT-3
+        </a>
+      </div>
     </div>
   );
 };
