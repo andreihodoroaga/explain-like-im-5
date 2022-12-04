@@ -1,43 +1,69 @@
 import Head from 'next/head';
-import Image from 'next/image';
-import buildspaceLogo from '../assets/buildspace-logo.png';
 import { useState } from 'react';
+import Button from '../components/Button.component';
 
 
 const Home = () => {
   const [userInput, setUserInput] = useState("");
   const [apiOutput, setApiOutput] = useState("");
-  const [isGenerating, setIsGenerating] = useState(false);
+  const [advancedApiOutput, setAdvancedApiOutput] = useState("");
+  const [isBaseGenerating, setisBaseGenerating] = useState(false);
+  const [isAdvancedGenerating, setisAdvancedGenerating] = useState(false);
 
   const callGenerateEndpoint = async () => {
-    setIsGenerating(true);
-
+		if (isBaseGenerating || isAdvancedGenerating)
+			return;
+  	setisBaseGenerating(true);
+		setApiOutput("");
+		setAdvancedApiOutput("");
+	
     const response = await fetch('api/generate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ userInput }),
+      body: JSON.stringify({ userInput: userInput }),
     })
-    
+     
     const data = await response.json();
     setApiOutput(data.output.text);
-    setIsGenerating(false);
-  }
+    setisBaseGenerating(false);
+	}
+
+	const callMoreDetailsEndpoint = async () => {
+		if (isBaseGenerating || isAdvancedGenerating)
+			return;
+  	setisAdvancedGenerating(true);
+	
+    const response = await fetch('api/more-details', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ userInput: userInput, prompt: apiOutput }),
+    })
+     
+    const data = await response.json();
+    setAdvancedApiOutput(data.output.text);
+    setisAdvancedGenerating(false);
+	}
 
   const onUserChangedText = (event) => {
+		const newInput = event.target.value;
+		if(newInput === "")
+			setApiOutput("");
     setUserInput(event.target.value);
   }
 
   return (
     <div className="root">
       <Head>
-        <title>GPT-3 Writer | buildspace</title>
+        <title>Explain like I'm 5</title>
       </Head>
       <div className="container">
         <div className="header">
           <div className="header-title">
-            <h1>Explain like I'm 5!</h1>
+            <h1>Explain like I'm 5</h1>
           </div>
           <div className="header-subtitle">
             <h2>Add any topic you'd like to understand in the field below</h2>
@@ -51,14 +77,12 @@ const Home = () => {
             onChange={onUserChangedText}
           />
           <div className="prompt-buttons">
-            <a
-              className={isGenerating ? 'generate-button loading' : 'generate-button'}
-              onClick={callGenerateEndpoint}
-            >
-              <div className="generate">
-             		{isGenerating ? <span className="loader"></span> : <p>Generate</p>}
-              </div>
-            </a>
+            <Button
+              isGenerating={isBaseGenerating}
+              generateExplanation={callGenerateEndpoint}
+							type="base"
+							content="Explain"
+            />
           </div>
           {apiOutput && (
             <div className="output">
@@ -69,11 +93,25 @@ const Home = () => {
               </div>
               <div className="output-content">
                 <p>{apiOutput}</p>
+								{advancedApiOutput && ( <p className="advanced">{advancedApiOutput}</p> )}
               </div>
+              <div className="output-buttons">
+								{!advancedApiOutput &&
+									(<Button
+										isGenerating={isAdvancedGenerating}
+										generateExplanation={callMoreDetailsEndpoint}
+										type="advanced"
+										content="More details"
+									/>
+								)}
+							</div>
             </div>
           )}
         </div>
       </div>
+			<div className='footer'>
+				<p className={`${isBaseGenerating || isAdvancedGenerating ? 'active' : ''} footer-text`}>Using OpenAI's GPT-3</p>
+			</div>
     </div>
   );
 };

@@ -21,6 +21,7 @@ body {
 
 .container {
 	display: flex;
+	flex-grow: 1;
 	place-content: center flex-start;
 	align-items: center;
 	flex: 0 0 auto;
@@ -29,7 +30,7 @@ body {
 	height: fit-content;
 	max-width: 975px;
 	overflow: auto;
-	padding: 50px;
+	padding: 25px 50px;
 	position: relative;
 	width: auto;
 	gap: 64px;
@@ -51,7 +52,7 @@ body {
 .header-title h1 {
 	width: 100%;
 	font-weight: 700;
-	font-size: 64px;
+	font-size: 56px;
 	letter-spacing: -4px;
 	line-height: 1.2em;
 	text-align: center;
@@ -59,10 +60,10 @@ body {
 }
 
 .header-subtitle h2 {
-	font-size: 20px;
+	font-size: 16px;
 	font-style: normal;
 	font-weight: 400;
-	line-height: 1.4em;
+	line-height: 1.25em;
 	color: rgba(255, 255, 255, 0.75);
 }
 
@@ -172,7 +173,6 @@ textarea {
 .generate-button {
 	place-content: flex-start;
 	align-items: flex-start;
-	background-color: rgb(255, 79, 18);
 	border-radius: 100px;
 	display: flex;
 	flex: 0 0 auto;
@@ -183,9 +183,21 @@ textarea {
 	padding: 16px 24px;
 	position: relative;
 	text-decoration: none;
-	width: min-content;
+	width: fit-content;
 	will-change: transform;
 	cursor: pointer;
+}
+
+.generate-button.base {
+	background-color: #FF4F12;
+}
+
+.generate-button.advanced:hover {
+	border: 1px solid #00A96B;
+}
+
+.generate-button.advanced p {
+	color: #00A96B;
 }
 
 .generate {
@@ -263,7 +275,46 @@ textarea {
 	margin-top: 0;
 	text-align: center;
 	white-space: pre-line;
-	color: rgba(255, 255, 255, 0.5);
+	color: rgba(255, 255, 255, 0.6);
+}
+
+.output-buttons {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.footer {
+	margin-top: auto;
+}
+
+.footer-text {
+	font-size: 14px;
+	color: rgba(255, 255, 255, 0.7);
+}
+
+.footer-text.active {
+	color: #F02A62;
+	box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
+	transform: scale(1);
+	animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+	0% {
+		transform: scale(0.9);
+		box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
+	}
+
+	70% {
+		transform: scale(1);
+		box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+	}
+
+	100% {
+		transform: scale(0.9);
+		box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+	}
 }
 
 @media (min-width: 810px) and (max-width: 1199px) {
